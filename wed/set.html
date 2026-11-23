@@ -281,11 +281,13 @@
             border-radius: 20px;
             padding: 24px;
             width: 90%;
-            max-width: 320px;
+            max-width: 380px;
+            box-sizing: border-box;
             transform: scale(0.8);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-align: center;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
         }
 
         .modal-overlay.show .modal-card {
@@ -307,6 +309,28 @@
             line-height: 1.5;
             margin-bottom: 20px;
             white-space: pre-line;
+            word-break: break-all;
+            overflow-wrap: anywhere;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal-url-badge {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 11px;
+            font-family: monospace;
+            color: #38bdf8;
+            word-break: break-all;
+            overflow-wrap: anywhere;
+            max-width: 100%;
+            box-sizing: border-box;
+            user-select: all;
+            line-height: 1.4;
+            text-align: left;
         }
 
         .modal-footer {
@@ -735,13 +759,18 @@
         document.getElementById('module').addEventListener("change", e => { websocket.send("#WWN$" + e.target.value) });
         document.getElementById('pass0').addEventListener("input", e => { websocket.send("#WWP$" + e.target.value) });
 
-        function showNotify(msg, type = "info", autoClose = true) {
+        function showNotify(msg, type = "info", autoClose = true, isHtml = false) {
             const overlay = document.getElementById("modal-overlay");
             const card = document.getElementById("modal-card");
             const footer = document.getElementById("modal-footer");
 
             document.getElementById("modal-title").innerText = "Notification";
-            document.getElementById("modal-msg").innerText = msg;
+            const msgEl = document.getElementById("modal-msg");
+            if (isHtml) {
+                msgEl.innerHTML = msg;
+            } else {
+                msgEl.innerText = msg;
+            }
             card.className = `modal-card type-${type}`;
 
             if (autoClose) {
@@ -754,13 +783,18 @@
             }
         }
 
-        function showConfirm(msg, onConfirm, title = "Confirm Action", confirmText = "YES", cancelText = "NO") {
+        function showConfirm(msg, onConfirm, title = "Confirm Action", confirmText = "YES", cancelText = "NO", isHtml = false) {
             const overlay = document.getElementById("modal-overlay");
             const card = document.getElementById("modal-card");
             const footer = document.getElementById("modal-footer");
 
             document.getElementById("modal-title").innerText = title;
-            document.getElementById("modal-msg").innerText = msg;
+            const msgEl = document.getElementById("modal-msg");
+            if (isHtml) {
+                msgEl.innerHTML = msg;
+            } else {
+                msgEl.innerText = msg;
+            }
             card.className = `modal-card type-info`;
 
             footer.innerHTML = `
@@ -800,9 +834,9 @@
             }
             if (!p.endsWith("/")) p += "/";
             document.getElementById('datapath').value = p;
-            showConfirm(`Save Server Data Path?\n\n${p}`, () => {
+            showConfirm(`Save Server Data Path?<div class="modal-url-badge">${p}</div>`, () => {
                 websocket.send("#SAV_PATH$" + p);
-            });
+            }, "Confirm Action", "YES", "NO", true);
         });
 
         // Handle "Add" and "Delete" buttons in WiFi list
