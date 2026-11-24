@@ -18,13 +18,13 @@
         "art.art": 29924034,
         "podcast.pod": 29924033,
         "updater.bin": 29924038,
-        "firmware.bin": 29924052
+        "firmware.bin": 29924053
     },
     "zing": {
         "apiKey": "X5BM3w8N7MKozC0B85o4KMlzLZKhV00y",
         "secret": "acOrvUS15XRW2o9JksiK1KgQ6Vbds8ZW",
         "version": "1.22.1"
     },
-    "firmware.bin": 29924052,
-    "version": 29924052
+    "firmware.bin": 29924053,
+    "version": 29924053
 }
