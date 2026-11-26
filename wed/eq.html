@@ -896,8 +896,8 @@
                 </div>
             </div>
 
-            <!-- 3. TAS5825M Dynamic Parametric EQ (Process Flow 7) -->
-            <div class="section-card" id="cardDpeq">
+            <!-- 3. TAS5825M Dynamic Parametric EQ (Hidden: BasePro_48k_Hybrid uses SmartBass + 3-Band DRC instead of standalone DPEQ) -->
+            <div class="section-card" id="cardDpeq" style="display: none;">
                 <div class="section-header">
                     <h3 class="section-title">
                         <span class="icon">📊</span>
@@ -1115,7 +1115,7 @@
                     <h3 class="section-title">
                         <span class="icon">🛡️</span>
                         <span>Multi-Band DRC</span>
-                        <span class="tag">3-Band Dynamics</span>
+                        <span class="tag">2-Way · 0x4C + 0x4E</span>
                     </h3>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span id="lblDrcState" class="status-pill">TẮT</span>
@@ -1127,11 +1127,14 @@
                 </div>
 
                 <div class="card-inner-box">
+                    <div style="font-size: 10px; color: var(--text-dim); background: rgba(0,229,255,0.06); padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(0,229,255,0.18); line-height: 1.35;">
+                        🎚️ <b>2-Way Active Split:</b> <b>Bass (Low)</b> &amp; <b>Vocal (Mid)</b> bảo vệ <b>0x4C Charge 6</b> · <b>Treble (High)</b> cắt theo Crossover Fc bảo vệ <b>0x4E Tweeter</b>.
+                    </div>
                     <!-- Tab Selector -->
                     <div style="display: flex; gap: 6px;">
-                        <button type="button" class="app-btn active" id="btnTabDrcLow" style="flex: 1;" onclick="switchDrcTab('low')">Bass (Low)</button>
-                        <button type="button" class="app-btn" id="btnTabDrcMid" style="flex: 1;" onclick="switchDrcTab('mid')">Vocal (Mid)</button>
-                        <button type="button" class="app-btn" id="btnTabDrcHigh" style="flex: 1;" onclick="switchDrcTab('high')">Treble (High)</button>
+                        <button type="button" class="app-btn active" id="btnTabDrcLow" style="flex: 1;" onclick="switchDrcTab('low')">Bass (Low · 0x4C)</button>
+                        <button type="button" class="app-btn" id="btnTabDrcMid" style="flex: 1;" onclick="switchDrcTab('mid')">Vocal (Mid · 0x4C)</button>
+                        <button type="button" class="app-btn" id="btnTabDrcHigh" style="flex: 1;" onclick="switchDrcTab('high')">Treble (High · 0x4E)</button>
                     </div>
 
                     <div class="drc-content-layout" style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 4px;">
@@ -1219,7 +1222,7 @@
                     <h3 class="section-title">
                         <span class="icon">🔊</span>
                         <span>SmartBass</span>
-                        <span class="tag">Dynamic Bass Tracking</span>
+                        <span class="tag">0x4C · Dynamic Loudness</span>
                     </h3>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span id="lblSmartBassState" class="status-pill">TẮT</span>
@@ -1275,6 +1278,10 @@
                                 <span id="lblSmartBassMorph" class="control-val">60%</span>
                             </div>
                             <input type="range" id="sliderSmartBassMorph" class="smart-slider" min="0" max="100" step="5" value="60" oninput="onSbSliderInput('morph')" onchange="onSbSliderChange('morph')">
+                        </div>
+
+                        <div style="font-size: 10px; color: var(--text-dim); line-height: 1.35; padding: 6px 8px; border-radius: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.18);">
+                            💡 <b>BasePro 48k Hybrid DSP:</b> Bù trầm thích ứng âm lượng được xử lý bởi <b>SmartBass</b> (0x4C) kết hợp <b>Multi-Band DRC</b> (firmware không có khối DPEQ rời).
                         </div>
                     </div>
                 </div>
@@ -1471,7 +1478,7 @@
                 <div class="card-inner-box">
                     <div>
                         <div class="control-header">
-                            <span class="control-title">Ngưỡng bảo vệ sụt áp Pin (PVDD Cutoff):</span>
+                            <span class="control-title">Ngưỡng tham chiếu pin (PVDD Ref):</span>
                             <span id="lblPvddThr" class="control-val">9.5 V</span>
                         </div>
                         <input type="range" id="sliderPvddThr" class="smart-slider" min="9.0" max="12.0" step="0.1" value="9.5" oninput="onPvddSliderInput('thr')" onchange="onPvddSliderChange()">
@@ -1480,41 +1487,68 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <div>
                             <div class="control-header">
-                                <span class="control-title">Độ dốc nén áp:</span>
+                                <span class="control-title">Gain nén PVDD (c325):</span>
                                 <span id="lblPvddScale" class="control-val">-0.5 dB/V</span>
                             </div>
                             <input type="range" id="sliderPvddScale" class="smart-slider" min="-2.0" max="-0.1" step="0.1" value="-0.5" oninput="onPvddSliderInput('scale')" onchange="onPvddSliderChange()">
                         </div>
                         <div>
                             <div class="control-header">
-                                <span class="control-title">Thời gian phản ứng:</span>
+                                <span class="control-title">Thời gian phản ứng (c550):</span>
                                 <span id="lblPvddTime" class="control-val">1.0 ms</span>
                             </div>
                             <input type="range" id="sliderPvddTime" class="smart-slider" min="0.5" max="10.0" step="0.5" value="1.0" oninput="onPvddSliderInput('time')" onchange="onPvddSliderChange()">
                         </div>
                     </div>
 
-                    <!-- Realtime DSP RMS Level Meters -->
+                    <!-- Realtime Dual-Amp DSP RMS Level Meters & Fault Diagnostics -->
                     <div style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06);">
-                        <div class="control-header" style="margin-bottom: 6px;">
-                            <span class="control-title">Realtime DSP RMS Level (dBFS):</span>
-                            <span id="lblMeterStatus" class="status-pill active" style="font-size: 9px; padding: 1px 6px;">MONITORING</span>
+                        <div class="control-header" style="margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                            <span class="control-title">Realtime Dual-Amp RMS (dBFS):</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span id="lblMeterStatus" class="status-pill active" style="font-size: 9px; padding: 1px 6px;">MONITORING</span>
+                                <button type="button" class="app-btn" onclick="clearHardwareFaults()" style="padding: 2px 7px; font-size: 9px; border-color: rgba(56,189,248,0.35); color: #38bdf8;" title="Xóa cờ lỗi phần cứng (Reg 0x78 = 0x80) cho cả 0x4C và 0x4E">🧹 Clear Fault</button>
+                            </div>
                         </div>
-                        <!-- Left Meter Bar -->
+
+                        <!-- Amp 0x4C (Mid-Bass) Header + Bars -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                            <span style="font-size: 10px; font-weight: 700; color: #00e676;">🔈 0x4C Mid-Bass (Charge 6)</span>
+                            <span id="badgeAmp4C" class="status-pill" style="font-size: 9px; padding: 1px 6px;">OFF / IDLE</span>
+                        </div>
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                             <span style="font-size: 10px; color: #94a3b8; width: 14px; font-weight: 700;">L:</span>
-                            <div style="flex: 1; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
-                                <div id="meterBarL" style="width: 15%; height: 100%; background: linear-gradient(90deg, #00e676 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
+                            <div style="flex: 1; height: 9px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                                <div id="meterBarL" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00e676 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
                             </div>
-                            <span id="lblMeterL" class="control-val" style="min-width: 42px;">-45dB</span>
+                            <span id="lblMeterL" class="control-val" style="min-width: 46px; font-size: 10px;">-120.0</span>
                         </div>
-                        <!-- Right Meter Bar -->
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 10px; color: #94a3b8; width: 14px; font-weight: 700;">R:</span>
+                            <div style="flex: 1; height: 9px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                                <div id="meterBarR" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00e676 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
+                            </div>
+                            <span id="lblMeterR" class="control-val" style="min-width: 46px; font-size: 10px;">-120.0</span>
+                        </div>
+
+                        <!-- Amp 0x4E (Tweeter) Header + Bars -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,0.06);">
+                            <span style="font-size: 10px; font-weight: 700; color: #ff4081;">📻 0x4E Tweeter (Acton)</span>
+                            <span id="badgeAmp4E" class="status-pill" style="font-size: 9px; padding: 1px 6px;">OFF / IDLE</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span style="font-size: 10px; color: #94a3b8; width: 14px; font-weight: 700;">L:</span>
+                            <div style="flex: 1; height: 9px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                                <div id="meterBarTL" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
+                            </div>
+                            <span id="lblMeterTL" class="control-val" style="min-width: 46px; font-size: 10px;">-120.0</span>
+                        </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span style="font-size: 10px; color: #94a3b8; width: 14px; font-weight: 700;">R:</span>
-                            <div style="flex: 1; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
-                                <div id="meterBarR" style="width: 15%; height: 100%; background: linear-gradient(90deg, #00e676 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
+                            <div style="flex: 1; height: 9px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                                <div id="meterBarTR" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8 60%, #ffd600 85%, #ff1744 100%); transition: width 0.15s ease;"></div>
                             </div>
-                            <span id="lblMeterR" class="control-val" style="min-width: 42px;">-45dB</span>
+                            <span id="lblMeterTR" class="control-val" style="min-width: 46px; font-size: 10px;">-120.0</span>
                         </div>
                         <!-- Tap Mux & Time Constant -->
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.06);">
@@ -1646,8 +1680,20 @@
                         </select>
                     </div>
                     <!-- Main Crossover Response Graph -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; font-size: 9px; font-family: var(--font-mono);">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="color: #00e676;">● Mid-Bass 0x4C</span>
+                            <span style="color: #ff4081;">● Tweeter 0x4E</span>
+                            <span style="color: #38bdf8;">━ Tổng Sum</span>
+                            <span style="color: #fbbf24;">┅ Diff (Null)</span>
+                        </div>
+                        <span id="lblCrossoverSummary" style="color: #cbd5e1;">Sum @ Fc: 0.0 dB · Δφ 0°</span>
+                    </div>
                     <div class="app-canvas-frame">
-                        <canvas id="crossoverCanvas" width="500" height="140" style="width: 100%; display: block;"></canvas>
+                        <canvas id="crossoverCanvas" width="500" height="165" style="width: 100%; display: block;"></canvas>
+                    </div>
+                    <div style="font-size: 9.5px; color: var(--text-dim); margin-top: 2px; line-height: 1.3;">
+                        📐 Baseline: <b>Charge 6 3.5"</b> (88.3 dB · Fs 117.8 Hz · Vas 1.36L · Box ~1.7L) + <b>Acton Tweeter</b> (LR4 = -6.02 dB @ Fc)
                     </div>
 
                     <!-- Sub, Mid, Treble Controls -->
@@ -5329,7 +5375,15 @@
                 if (event.data.startsWith('EQ_METER:')) {
                     const parts = event.data.substring(9).split(',');
                     if (parts.length >= 2) {
-                        updateDspMeter(parseFloat(parts[0]), parseFloat(parts[1]));
+                        updateDspMeter(
+                            parseFloat(parts[0]), parseFloat(parts[1]),
+                            parts.length >= 4 ? parseFloat(parts[2]) : -120.0,
+                            parts.length >= 4 ? parseFloat(parts[3]) : -120.0,
+                            parts.length >= 8 ? parseInt(parts[4]) : 0xFF,
+                            parts.length >= 8 ? parseInt(parts[5]) : 0,
+                            parts.length >= 8 ? parseInt(parts[6]) : 0xFF,
+                            parts.length >= 8 ? parseInt(parts[7]) : 0
+                        );
                     }
                 }
 
@@ -7397,6 +7451,50 @@
         console.log("Sent Crossover Settings:", crossoverState);
     }
 
+    function makeBiquadComplexCoeffs(type, fc, q, delayUs, invertPhase) {
+        const fs = 48000.0;
+        const w0 = 2.0 * Math.PI * fc / fs;
+        const cosW0 = Math.cos(w0), sinW0 = Math.sin(w0);
+        let b0 = 1, b1 = 0, b2 = 0, a0 = 1, a1 = 0, a2 = 0;
+
+        if (type === 3) { // LPF 2nd-order
+            const alpha = sinW0 / (2.0 * q);
+            b0 = (1.0 - cosW0) / 2.0; b1 = 1.0 - cosW0; b2 = (1.0 - cosW0) / 2.0;
+            a0 = 1.0 + alpha; a1 = -2.0 * cosW0; a2 = 1.0 - alpha;
+        } else if (type === 4) { // HPF 2nd-order
+            const alpha = sinW0 / (2.0 * q);
+            b0 = (1.0 + cosW0) / 2.0; b1 = -(1.0 + cosW0); b2 = (1.0 + cosW0) / 2.0;
+            a0 = 1.0 + alpha; a1 = -2.0 * cosW0; a2 = 1.0 - alpha;
+        } else if (type === 8) { // 1st-order All-Pass Phase Delay calibrated at fc
+            const delayS = (delayUs || 0) * 1e-6;
+            let theta = 2.0 * Math.PI * fc * delayS;
+            if (theta >= 0.0005 && fc > 10.0) {
+                if (theta > 3.10) theta = 3.10;
+                const k = Math.tan(Math.PI * fc / fs) / Math.tan(0.5 * theta);
+                const a = (1.0 - k) / (1.0 + k);
+                b0 = -a; b1 = 1.0; b2 = 0.0;
+                a0 = 1.0; a1 = -a; a2 = 0.0;
+            }
+        }
+        const sgn = invertPhase ? -1 : 1;
+        return { b0: sgn * b0 / a0, b1: sgn * b1 / a0, b2: sgn * b2 / a0, a1: a1 / a0, a2: a2 / a0 };
+    }
+
+    function evalBiquadH(c, w) {
+        const cw = Math.cos(w), sw = Math.sin(w);
+        const c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
+        const nr = c.b0 + c.b1 * cw + c.b2 * c2;
+        const ni = -(c.b1 * sw + c.b2 * s2);
+        const dr = 1.0 + c.a1 * cw + c.a2 * c2;
+        const di = -(c.a1 * sw + c.a2 * s2);
+        const dm2 = dr * dr + di * di + 1e-18;
+        return { re: (nr * dr + ni * di) / dm2, im: (ni * dr - nr * di) / dm2 };
+    }
+
+    function cmul(a, b) {
+        return { re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re };
+    }
+
     function drawCrossoverCurve() {
         const canvas = document.getElementById('crossoverCanvas');
         if (!canvas) return;
@@ -7405,150 +7503,178 @@
         const h = canvas.height;
 
         ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = "rgba(10, 15, 30, 0.9)";
+        ctx.fillStyle = "rgba(10, 15, 30, 0.92)";
         ctx.fillRect(0, 0, w, h);
 
-        // Grid lines
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-        ctx.lineWidth = 1;
-        for (let db = -24; db <= 12; db += 12) {
-            let y = h / 2 - (db / 36) * (h * 0.4);
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(w, y);
-            ctx.stroke();
+        const minF = 30.0, maxF = 20000.0;
+        const logSpan = Math.log10(maxF / minF);
+        const mapFreqToX = (f) => (Math.log10(f / minF) / logSpan) * w;
+        const mapDbToY = (db) => {
+            const clamped = Math.max(-32, Math.min(12, db));
+            // Range +12 dB (top=12px) down to -30 dB (bottom=h-12px)
+            return 14 + ((12.0 - clamped) / 42.0) * (h - 24);
+        };
+
+        // Horizontal dB Grid (+6, 0, -6, -12, -24 dB)
+        ctx.font = "9px monospace";
+        ctx.textAlign = "left";
+        for (const db of [6, 0, -6, -12, -24]) {
+            const y = mapDbToY(db);
+            ctx.strokeStyle = (db === 0) ? "rgba(255, 255, 255, 0.22)" : (db === -6 ? "rgba(0, 242, 254, 0.14)" : "rgba(255, 255, 255, 0.06)");
+            ctx.lineWidth = (db === 0) ? 1.2 : 1;
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            ctx.fillStyle = (db === 0) ? "rgba(255,255,255,0.55)" : "rgba(148,163,184,0.6)";
+            ctx.fillText((db > 0 ? "+" : "") + db + "dB", 4, y - 2);
+        }
+
+        // Vertical Frequency Markers (50, 100, 300, 1k, 3k, 10k)
+        ctx.textAlign = "center";
+        for (const fMark of [50, 100, 300, 1000, 3000, 10000]) {
+            const xf = mapFreqToX(fMark);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+            ctx.beginPath(); ctx.moveTo(xf, 0); ctx.lineTo(xf, h); ctx.stroke();
+            ctx.fillStyle = "rgba(148,163,184,0.55)";
+            ctx.fillText(fMark >= 1000 ? (fMark / 1000) + "k" : fMark + "", xf, h - 3);
         }
 
         const isEnabled = crossoverState.en === 1;
-        const fcHigh = crossoverState.fc;
-        const fcLow = crossoverState.fc_low || 250;
-        const order = crossoverState.slope === 2 ? 4 : 2; // 2nd order (12dB/oct) or 4th order (24dB/oct)
-        const is3Way = systemSpeakerMode === 3;
+        const fcHigh = Math.max(500, crossoverState.fc || 2500);
+        const fcLow = Math.max(80, crossoverState.fc_low || 250);
+        const isLR4 = (crossoverState.slope === 2);
+        const is3Way = (systemSpeakerMode === 3);
 
         if (is3Way) {
-            // --- 3-WAY CURVES ---
-            // 1. Sub/Bass Low-Pass curve in Yellow (#ff9100)
-            ctx.strokeStyle = isEnabled ? "#ff9100" : "#666";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
+            const lpf1 = makeBiquadComplexCoeffs(3, fcLow, 0.7071, 0, false);
+            const hpf1 = makeBiquadComplexCoeffs(4, fcHigh, 0.7071, 0, crossoverState.invert_phase === 1);
+            const subGain = Math.pow(10, (crossoverState.bass_trim || 0) / 20);
+            const midGain = Math.pow(10, (crossoverState.mid_trim || 0) / 20);
+            const trbGain = Math.pow(10, (crossoverState.treb_trim || 0) / 20);
+            const ptsSub = [], ptsMid = [], ptsTrb = [], ptsSum = [];
+
             for (let x = 0; x < w; x++) {
-                let freq = 40 * Math.pow(250, x / w); // Log 40Hz - 10kHz
-                let ratio = freq / fcLow;
-                let gainDb = crossoverState.bass_trim || 0.0;
+                const freq = minF * Math.pow(maxF / minF, x / w);
+                const wRad = 2.0 * Math.PI * freq / 48000.0;
+                let hSub = { re: subGain, im: 0 };
+                let hMid = { re: midGain, im: 0 };
+                let hTrb = { re: trbGain, im: 0 };
                 if (isEnabled) {
-                    let mag = 1 / Math.sqrt(1 + Math.pow(ratio, order));
-                    gainDb += 20 * Math.log10(mag);
+                    const bLp = evalBiquadH(lpf1, wRad);
+                    hSub = cmul(hSub, isLR4 ? cmul(bLp, bLp) : bLp);
+                    const mHp = evalBiquadH(makeBiquadComplexCoeffs(4, fcLow, 0.5, 0, false), wRad);
+                    const mLp = evalBiquadH(makeBiquadComplexCoeffs(3, fcHigh, 0.5, 0, false), wRad);
+                    hMid = cmul(hMid, cmul(mHp, mLp));
+                    const bHp = evalBiquadH(hpf1, wRad);
+                    hTrb = cmul(hTrb, isLR4 ? cmul(bHp, bHp) : bHp);
                 }
-                let y = h / 2 - (gainDb / 36) * (h * 0.4);
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                const toY = (c) => mapDbToY(20 * Math.log10(Math.hypot(c.re, c.im) + 1e-6));
+                ptsSub.push({ x, y: toY(hSub) });
+                ptsMid.push({ x, y: toY(hMid) });
+                ptsTrb.push({ x, y: toY(hTrb) });
+                ptsSum.push({ x, y: toY({ re: hSub.re + hMid.re + hTrb.re, im: hSub.im + hMid.im + hTrb.im }) });
             }
-            ctx.stroke();
+            const plotLine = (pts, col, lw, dash) => {
+                ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+                ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke();
+            };
+            plotLine(ptsSub, isEnabled ? "#ff9100" : "#666", 2.0);
+            plotLine(ptsMid, isEnabled ? "#00e676" : "#666", 2.0);
+            plotLine(ptsTrb, isEnabled ? "#ff4081" : "#666", 2.0);
+            plotLine(ptsSum, "#38bdf8", 2.2);
+            ctx.setLineDash([]);
+        } else {
+            // --- 2-WAY EXACT COMPLEX BIQUAD RESPONSE (Charge 6 0x4C + Acton Tweeter 0x4E) ---
+            const inv = (crossoverState.invert_phase === 1);
+            const delayUs = (phaseState && (phaseState.treble !== undefined)) ? phaseState.treble : 0;
+            const subEn = (typeof excursionState !== 'undefined' && excursionState.en === 1);
+            const subFc = (typeof excursionState !== 'undefined' && excursionState.fc >= 20) ? excursionState.fc : 50;
 
-            // 2. Midrange Band-Pass curve in Green (#00e676)
-            // NOTE: Mid 3-Way thực tế chỉ 12dB/oct (LR2 Q=0.5) vì giới hạn EQ slot
-            // → Dùng order=2 cho Mid để hiển thị đúng
-            const midOrder = 2; // LR2 12dB/oct per edge (slot giới hạn)
-            ctx.strokeStyle = isEnabled ? "#00e676" : "#666";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
+            const lpfBq = makeBiquadComplexCoeffs(3, fcHigh, 0.7071, 0, false);
+            const hpfBq1 = makeBiquadComplexCoeffs(4, fcHigh, 0.7071, 0, inv);
+            const hpfBq2 = makeBiquadComplexCoeffs(4, fcHigh, 0.7071, 0, false);
+            const subBq = makeBiquadComplexCoeffs(4, subFc, 0.7071, 0, false);
+            const apBq = makeBiquadComplexCoeffs(8, fcHigh, 0.7071, delayUs, false);
+
+            const mbGain = Math.pow(10, (crossoverState.mid_trim || 0) / 20);
+            const trGain = Math.pow(10, (crossoverState.treb_trim || 0) / 20);
+            const ptsMb = [], ptsTr = [], ptsSum = [], ptsDiff = [];
+
+            const eval2WayAt = (freq) => {
+                const wRad = 2.0 * Math.PI * freq / 48000.0;
+                let hMb = { re: mbGain, im: 0 };
+                let hTr = { re: trGain, im: 0 };
+                if (subEn) hMb = cmul(hMb, evalBiquadH(subBq, wRad));
+                if (isEnabled) {
+                    const lp = evalBiquadH(lpfBq, wRad);
+                    hMb = cmul(hMb, isLR4 ? cmul(lp, lp) : lp);
+                    const hp1 = evalBiquadH(hpfBq1, wRad);
+                    hTr = cmul(hTr, isLR4 ? cmul(hp1, evalBiquadH(hpfBq2, wRad)) : hp1);
+                } else if (inv) {
+                    hTr = { re: -hTr.re, im: -hTr.im };
+                }
+                if (delayUs > 0) hTr = cmul(hTr, evalBiquadH(apBq, wRad));
+                const hSum = { re: hMb.re + hTr.re, im: hMb.im + hTr.im };
+                const hDiff = { re: hMb.re - hTr.re, im: hMb.im - hTr.im };
+                return { hMb, hTr, hSum, hDiff };
+            };
+
             for (let x = 0; x < w; x++) {
-                let freq = 40 * Math.pow(250, x / w);
-                let ratioLow = fcLow / freq;
-                let ratioHigh = freq / fcHigh;
-                let gainDb = crossoverState.mid_trim;
-                if (isEnabled) {
-                    let magHpf = 1 / Math.sqrt(1 + Math.pow(ratioLow, midOrder));
-                    let magLpf = 1 / Math.sqrt(1 + Math.pow(ratioHigh, midOrder));
-                    gainDb += 20 * Math.log10(magHpf * magLpf);
-                }
-                let y = h / 2 - (gainDb / 36) * (h * 0.4);
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                const freq = minF * Math.pow(maxF / minF, x / w);
+                const r = eval2WayAt(freq);
+                const toY = (c) => mapDbToY(20 * Math.log10(Math.hypot(c.re, c.im) + 1e-6));
+                ptsMb.push({ x, y: toY(r.hMb) });
+                ptsTr.push({ x, y: toY(r.hTr) });
+                ptsSum.push({ x, y: toY(r.hSum) });
+                ptsDiff.push({ x, y: toY(r.hDiff) });
             }
-            ctx.stroke();
 
-            // 3. Treble High-Pass curve in Pink (#ff4081)
-            ctx.strokeStyle = isEnabled ? "#ff4081" : "#666";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            for (let x = 0; x < w; x++) {
-                let freq = 40 * Math.pow(250, x / w);
-                let ratio = fcHigh / freq;
-                let gainDb = crossoverState.treb_trim;
-                if (isEnabled) {
-                    let mag = 1 / Math.sqrt(1 + Math.pow(ratio, order));
-                    gainDb += 20 * Math.log10(mag);
-                }
-                let y = h / 2 - (gainDb / 36) * (h * 0.4);
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
+            const drawPath = (pts, col, lw, dash) => {
+                ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+                ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke();
+            };
 
-            // Marker lines for Crossover Frequencies
-            let xCrossLow = (Math.log10(fcLow / 40) / Math.log10(250)) * w;
-            let xCrossHigh = (Math.log10(fcHigh / 40) / Math.log10(250)) * w;
-
-            ctx.strokeStyle = "rgba(255, 145, 0, 0.7)";
-            ctx.setLineDash([3, 3]);
-            ctx.beginPath(); ctx.moveTo(xCrossLow, 0); ctx.lineTo(xCrossLow, h); ctx.stroke();
-
-            ctx.strokeStyle = "rgba(0, 242, 254, 0.7)";
-            ctx.beginPath(); ctx.moveTo(xCrossHigh, 0); ctx.lineTo(xCrossHigh, h); ctx.stroke();
+            drawPath(ptsDiff, "rgba(251, 191, 36, 0.45)", 1.3, [4, 4]);
+            drawPath(ptsMb, isEnabled ? "#00e676" : "#666", 2.0);
+            drawPath(ptsTr, isEnabled ? "#ff4081" : "#666", 2.0);
+            ctx.shadowColor = "rgba(56, 189, 248, 0.45)";
+            ctx.shadowBlur = 5;
+            drawPath(ptsSum, "#38bdf8", 2.5);
+            ctx.shadowBlur = 0;
             ctx.setLineDash([]);
 
-            ctx.font = "9px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillStyle = "#ff9100"; ctx.fillText(`${fcLow}Hz`, xCrossLow, 12);
-            ctx.fillStyle = "#00f2fe"; ctx.fillText(`${fcHigh}Hz`, xCrossHigh, 12);
-
-        } else {
-            // --- 2-WAY CURVES ---
-            ctx.strokeStyle = isEnabled ? "#00e676" : "#666";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            for (let x = 0; x < w; x++) {
-                let freq = 100 * Math.pow(100, x / w);
-                let ratio = freq / fcHigh;
-                let gainDb = crossoverState.mid_trim;
-                if (isEnabled) {
-                    let mag = 1 / Math.sqrt(1 + Math.pow(ratio, order));
-                    gainDb += 20 * Math.log10(mag);
-                }
-                let y = h / 2 - (gainDb / 36) * (h * 0.4);
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+            // Marker lines for Subsonic HPF & Crossover Fc
+            if (subEn) {
+                const xSub = mapFreqToX(subFc);
+                ctx.strokeStyle = "rgba(245, 158, 11, 0.65)";
+                ctx.setLineDash([2, 3]);
+                ctx.beginPath(); ctx.moveTo(xSub, 0); ctx.lineTo(xSub, h - 12); ctx.stroke();
+                ctx.fillStyle = "#f59e0b";
+                ctx.font = "9px monospace";
+                ctx.textAlign = "left";
+                ctx.fillText(`HPF ${subFc}Hz`, Math.min(w - 58, xSub + 3), 11);
             }
-            ctx.stroke();
 
-            ctx.strokeStyle = isEnabled ? "#ff4081" : "#666";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            for (let x = 0; x < w; x++) {
-                let freq = 100 * Math.pow(100, x / w);
-                let ratio = fcHigh / freq;
-                let gainDb = crossoverState.treb_trim;
-                if (isEnabled) {
-                    let mag = 1 / Math.sqrt(1 + Math.pow(ratio, order));
-                    gainDb += 20 * Math.log10(mag);
-                }
-                let y = h / 2 - (gainDb / 36) * (h * 0.4);
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-
-            let xCross = (Math.log10(fcHigh / 100) / Math.log10(100)) * w;
+            const xCross = mapFreqToX(fcHigh);
             ctx.strokeStyle = "rgba(0, 242, 254, 0.7)";
             ctx.setLineDash([3, 3]);
-            ctx.beginPath(); ctx.moveTo(xCross, 0); ctx.lineTo(xCross, h); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(xCross, 0); ctx.lineTo(xCross, h - 12); ctx.stroke();
             ctx.setLineDash([]);
 
             ctx.fillStyle = "#00f2fe";
-            ctx.font = "10px sans-serif";
+            ctx.font = "10px monospace";
             ctx.textAlign = "center";
-            ctx.fillText(`fc: ${fcHigh} Hz`, xCross, 15);
+            ctx.fillText(`${isLR4 ? 'LR4' : 'BW2'} ${fcHigh} Hz`, xCross, 11);
+
+            // Compute Summary @ Fc (Phase delta & Sum gain)
+            const atFc = eval2WayAt(fcHigh);
+            const sumDbAtFc = 20 * Math.log10(Math.hypot(atFc.hSum.re, atFc.hSum.im) + 1e-6);
+            let dPhi = (Math.atan2(atFc.hTr.im, atFc.hTr.re) - Math.atan2(atFc.hMb.im, atFc.hMb.re)) * 180 / Math.PI;
+            while (dPhi > 180) dPhi -= 360;
+            while (dPhi < -180) dPhi += 360;
+            const lblSum = document.getElementById('lblCrossoverSummary');
+            if (lblSum) {
+                const phCol = Math.abs(dPhi) <= 30 ? "#00e676" : (Math.abs(dPhi) <= 65 ? "#fbbf24" : "#ff5252");
+                lblSum.innerHTML = `Sum@Fc: <b style="color:#38bdf8">${sumDbAtFc >= 0 ? '+' : ''}${sumDbAtFc.toFixed(1)}dB</b> · Δφ <b style="color:${phCol}">${dPhi.toFixed(0)}°</b>`;
+            }
         }
     }
 
@@ -8668,8 +8794,9 @@
             if (lbl) lbl.innerText = `${val} µs (${cm}cm)`;
             phaseState.sub = val;
         }
+        drawCrossoverCurve();
     }
-    function onPhaseSliderChange() { sendPhaseSettings(); }
+    function onPhaseSliderChange() { sendPhaseSettings(); drawCrossoverCurve(); }
 
     function sendPhaseSettings() {
         if (isSyncingUI) return;
@@ -8756,21 +8883,68 @@
     function onCrossoverInvertPhaseChange() {
         const chk = document.getElementById('chkCrossoverInvertPhase');
         if (crossoverState) crossoverState.invert_phase = chk && chk.checked ? 1 : 0;
+        drawCrossoverCurve();
         sendCrossoverSettings();
     }
 
-    // Realtime DSP RMS Meter update
-    function updateDspMeter(leftDb, rightDb) {
-        const barL = document.getElementById('meterBarL');
-        const barR = document.getElementById('meterBarR');
-        const lblL = document.getElementById('lblMeterL');
-        const lblR = document.getElementById('lblMeterR');
-        const pctL = Math.max(0, Math.min(100, ((leftDb + 60) / 60) * 100));
-        const pctR = Math.max(0, Math.min(100, ((rightDb + 60) / 60) * 100));
-        if (barL) barL.style.width = pctL + "%";
-        if (barR) barR.style.width = pctR + "%";
-        if (lblL) lblL.innerText = leftDb.toFixed(1) + "dB";
-        if (lblR) lblR.innerText = rightDb.toFixed(1) + "dB";
+    function updateAmpHealthBadge(elId, pwr, flt) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const r70 = flt & 0xFF;
+        const r71 = (flt >> 8) & 0xFF;
+        const r72 = (flt >> 16) & 0xFF;
+        const r73 = (flt >> 24) & 0xFF;
+        const hasFault = ((r70 | r71 | r72) !== 0);
+        const hasOtw = (r73 !== 0);
+        if (hasFault) {
+            el.innerText = `FAULT (${r70.toString(16)}/${r71.toString(16)}/${r72.toString(16)})`;
+            el.style.color = "#ff5252";
+            el.style.borderColor = "rgba(255, 82, 82, 0.5)";
+        } else if (hasOtw) {
+            el.innerText = `OT WARN (0x${r73.toString(16)})`;
+            el.style.color = "#fbbf24";
+            el.style.borderColor = "rgba(251, 191, 36, 0.5)";
+        } else if (pwr === 3) {
+            el.innerText = "PLAY OK";
+            el.style.color = "#00e676";
+            el.style.borderColor = "rgba(0, 230, 118, 0.35)";
+        } else if (pwr === 2) {
+            el.innerText = "HI-Z IDLE";
+            el.style.color = "#fbbf24";
+            el.style.borderColor = "rgba(251, 191, 36, 0.35)";
+        } else if (pwr === 0 || pwr === 0xFF) {
+            el.innerText = pwr === 0xFF ? "NO ACK" : "PWR OFF";
+            el.style.color = "#94a3b8";
+            el.style.borderColor = "rgba(148, 163, 184, 0.25)";
+        } else {
+            el.innerText = `STATE 0x${pwr.toString(16).toUpperCase()}`;
+            el.style.color = "#38bdf8";
+            el.style.borderColor = "rgba(56, 189, 248, 0.35)";
+        }
+    }
+
+    // Realtime Dual-Amp DSP RMS Meter & Health update
+    function updateDspMeter(leftDb, rightDb, trLeftDb = -120.0, trRightDb = -120.0, mPwr = 0xFF, mFlt = 0, tPwr = 0xFF, tFlt = 0) {
+        const setBar = (barId, lblId, db) => {
+            const bar = document.getElementById(barId);
+            const lbl = document.getElementById(lblId);
+            const safeDb = isNaN(db) ? -120.0 : db;
+            const pct = Math.max(0, Math.min(100, ((safeDb + 60) / 60) * 100));
+            if (bar) bar.style.width = pct + "%";
+            if (lbl) lbl.innerText = safeDb.toFixed(1);
+        };
+        setBar('meterBarL', 'lblMeterL', leftDb);
+        setBar('meterBarR', 'lblMeterR', rightDb);
+        setBar('meterBarTL', 'lblMeterTL', trLeftDb);
+        setBar('meterBarTR', 'lblMeterTR', trRightDb);
+        updateAmpHealthBadge('badgeAmp4C', mPwr, mFlt);
+        updateAmpHealthBadge('badgeAmp4E', tPwr, tFlt);
+        const st = document.getElementById('lblMeterStatus');
+        if (st) {
+            const playing = (mPwr === 3 || tPwr === 3);
+            st.innerText = playing ? "ACTIVE" : (mPwr === 0 ? "SLEEP / 24V OFF" : "IDLE / HI-Z");
+            st.style.color = playing ? "#00e676" : "#9ca3af";
+        }
     }
 
     // Periodic meter poller
@@ -8908,15 +9082,16 @@
     function clearHardwareFaults() {
         if (window.eqWebSocket && window.eqWebSocket.readyState === WebSocket.OPEN) {
             window.eqWebSocket.send("#EQ_REG_WRITE$0x78,0x80");
-            // Also re-read faults after clear
+            // Re-poll faults & telemetry immediately after clear (covers both 0x4C and 0x4E)
             setTimeout(() => {
                 if (window.eqWebSocket && window.eqWebSocket.readyState === WebSocket.OPEN) {
+                    window.eqWebSocket.send("#EQ_GET_METER$");
                     window.eqWebSocket.send("#EQ_REG_READ$0x70");
                     window.eqWebSocket.send("#EQ_REG_READ$0x71");
                     window.eqWebSocket.send("#EQ_REG_READ$0x72");
                 }
-            }, 100);
-            showToast("🧹 Clear Faults Sent (Reg 0x78 = 0x80)", "#00e676");
+            }, 120);
+            showToast("🧹 Clear Faults Sent (0x4C & 0x4E · Reg 0x78 = 0x80)", "#00e676");
         }
     }
 
@@ -9049,8 +9224,10 @@
             excursionState.dec = parseFloat(document.getElementById('sliderExcursionDec').value);
             document.getElementById('lblExcursionDec').innerText = excursionState.dec.toFixed(0) + " ms";
         } else if (field === 'fc') {
-            excursionState.fc = parseFloat(document.getElementById('sliderExcursionFc').value);
-            document.getElementById('lblExcursionFc').innerText = excursionState.fc.toFixed(0) + " Hz";
+            const val = parseFloat(document.getElementById('sliderExcursionFc').value);
+            excursionState.fc = val;
+            document.getElementById('lblExcursionFc').innerText = val.toFixed(0) + " Hz";
+            drawCrossoverCurve();
         }
     }
 
@@ -9058,6 +9235,7 @@
         const chk = document.getElementById('chkExcursionEn');
         excursionState.en = chk && chk.checked ? 1 : 0;
         syncExcursionUi();
+        drawCrossoverCurve();
         sendExcursionSettings();
     }
 
